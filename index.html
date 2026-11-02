@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentHub - Panel de Control SaaS</title>
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100 flex flex-col md:flex-row overflow-hidden font-sans">
+
+  <!-- NAVEGACIÓN LATERAL SEMÁNTICA PERSISTENTE -->
+  <aside aria-label="Navegación principal" class="flex-shrink-0 w-full md:w-20 lg:w-64 bg-white dark:bg-slate-900 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 flex md:flex-col justify-between z-20">
+    <!-- Logotipo y Marca -->
+    <div>
+      <div class="h-16 flex items-center px-4 md:px-3 lg:px-6 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm flex-shrink-0" aria-hidden="true">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <div class="hidden lg:block">
+            <span class="font-bold text-slate-900 dark:text-white text-lg tracking-tight">AgentHub</span>
+            <span class="block text-xs text-slate-500 dark:text-slate-400">Demostración SaaS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enlaces de Navegación (6 vistas) -->
+      <nav class="p-2 md:p-2 lg:p-4 space-y-1 overflow-x-auto md:overflow-visible flex md:flex-col items-center md:items-stretch" aria-label="Vistas del sistema">
+        <!-- 1. Resumen -->
+        <button id="nav-btn-resumen" data-view="resumen" aria-current="page" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span class="hidden lg:inline">Resumen</span>
+          <span class="sr-only lg:hidden">Resumen</span>
+        </button>
+
+        <!-- 2. Agentes -->
+        <button id="nav-btn-agentes" data-view="agentes" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+          <span class="hidden lg:inline">Agentes</span>
+          <span class="sr-only lg:hidden">Agentes</span>
+        </button>
+
+        <!-- 3. Skills -->
+        <button id="nav-btn-skills" data-view="skills" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span class="hidden lg:inline">Skills</span>
+          <span class="sr-only lg:hidden">Skills</span>
+        </button>
+
+        <!-- 4. Actividad -->
+        <button id="nav-btn-actividad" data-view="actividad" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="hidden lg:inline">Actividad</span>
+          <span class="sr-only lg:hidden">Actividad</span>
+        </button>
+
+        <!-- 5. Catálogo -->
+        <button id="nav-btn-catalogo" data-view="catalogo" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+          </svg>
+          <span class="hidden lg:inline">Catálogo</span>
+          <span class="sr-only lg:hidden">Catálogo</span>
+        </button>
+
+        <!-- 6. Ajustes -->
+        <button id="nav-btn-ajustes" data-view="ajustes" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <span class="hidden lg:inline">Ajustes</span>
+          <span class="sr-only lg:hidden">Ajustes</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Pie del sidebar con info de modo y estado -->
+    <div class="hidden lg:block p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center justify-between">
+        <span>Estado del sistema</span>
+        <span class="inline-flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Operativo
+        </span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-400 dark:text-slate-500">
+        AgentHub v1.0 • Demo
+      </div>
+    </div>
+  </aside>
+
+  <!-- REGIÓN PRINCIPAL -->
+  <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-slate-50 dark:bg-slate-950">
+
+    <!-- HEADER GLOBAL -->
+    <header class="h-16 flex-shrink-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 lg:px-8 flex items-center justify-between z-10">
+      <!-- Breadcrumb y Título de vista -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">AgentHub</span>
+        <span class="text-slate-400 dark:text-slate-600" aria-hidden="true">/</span>
+        <h1 id="header-view-title" class="text-base sm:text-lg font-semibold text-slate-900 dark:text-white">Resumen</h1>
+      </div>
+
+      <!-- Controles de cabecera: Selector de Tema y Cuenta Demo -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- Control de tema (Claro / Oscuro) -->
+        <button id="theme-toggle-header" type="button" aria-label="Cambiar a modo oscuro" class="p-2 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+          <!-- Icono Sol (se muestra en modo oscuro para volver a claro) -->
+          <svg id="theme-icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <!-- Icono Luna (se muestra en modo claro para pasar a oscuro) -->
+          <svg id="theme-icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+
+        <div class="h-6 w-px bg-slate-200 dark:bg-slate-800" aria-hidden="true"></div>
+
+        <!-- Menú Desplegable de Cuenta Demo -->
+        <div class="relative">
+          <button id="account-dropdown-btn" type="button" aria-expanded="false" aria-haspopup="true" class="flex items-center gap-2.5 p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold text-xs flex items-center justify-center border border-indigo-200 dark:border-indigo-800" aria-hidden="true">
+              ED
+            </div>
+            <div class="text-left hidden sm:block">
+              <span class="block text-sm font-medium leading-none">Equipo Demo</span>
+              <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Demostración local</span>
+            </div>
+            <svg class="w-4 h-4 text-slate-400 dark:text-slate-500 transition-transform duration-200" id="account-caret" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <!-- Menú Flotante de Cuenta -->
+          <div id="account-menu" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 p-2 z-50 focus:outline-none" role="menu" aria-orientation="vertical">
+            <div class="px-3 py-2 border-b border-slate-100 dark:border-slate-800/80 mb-1">
+              <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Cuenta Activa</p>
+              <p class="text-sm font-medium text-slate-900 dark:text-slate-100">Equipo Demo</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">demo@agenthub.local</p>
+            </div>
+            <div class="px-3 py-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 rounded-lg">
+              Entorno estático de solo lectura. No hay sesión ni backend configurado.
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL DE VISTAS (Scroll vertical independiente, sin overflow horizontal) -->
+    <main id="main-content" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 outline-none" tabindex="-1">
+      
+      <!-- ========================================== -->
+      <!-- VISTA 1: RESUMEN (Vista Inicial) -->
+      <!-- ========================================== -->
+      <section id="view-resumen" class="view-panel space-y-6 max-w-7xl mx-auto" aria-labelledby="view-resumen-title">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 id="view-resumen-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Panel de Resumen</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Visión global del estado del sistema, agentes configurados y ejecuciones recientes.</p>
+          </div>
+          <button type="button" data-nav-to="actividad" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300 dark:hover:bg-indigo-900 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 self-start sm:self-auto">
+            Ver actividad completa
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 3 Indicadores Compactos (No son controles) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" aria-label="Métricas del sistema">
+          <!-- Indicador 1: Agentes -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Agentes</span>
+              <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400" aria-hidden="true">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              </span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-slate-900 dark:text-white">4</span>
+              <span class="text-xs font-medium text-slate-500 dark:text-slate-400">registrados</span>
+            </div>
+            <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              3 activos • 1 pausado
+            </p>
+          </div>
+
+          <!-- Indicador 2: Skills Disponibles -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Skills</span>
+              <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400" aria-hidden="true">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-slate-900 dark:text-white">5</span>
+              <span class="text-xs font-medium text-slate-500 dark:text-slate-400">disponibles</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
+              Todas operativas en catálogo
+            </p>
+          </div>
+
+          <!-- Indicador 3: Ejecuciones 24h -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ejecuciones (24h)</span>
+              <span class="p-2 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400" aria-hidden="true">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-3xl font-bold text-slate-900 dark:text-white">128</span>
+              <span class="text-xs font-medium text-slate-500 dark:text-slate-400">completadas</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
+              Últimas 24 horas registradas
+            </p>
+          </div>
+        </div>
+
+        <!-- Dos Regiones de Información: Agentes Destacados y Actividad Reciente -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Región 1: Agentes Destacados (Atlas, Nara, Lumen) -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                  <h3 class="font-semibold text-slate-900 dark:text-white text-base">Agentes Destacados</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Selecciona un agente para abrir su ficha de solo lectura</p>
+                </div>
+                <button type="button" data-nav-to="agentes" class="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 focus:outline-none focus:underline">
+                  Ver todos
+                </button>
+              </div>
+
+              <div class="divide-y divide-slate-100 dark:divide-slate-800/80 mt-2">
+                <!-- Atlas -->
+                <div class="py-3.5 flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm" aria-hidden="true">
+                      At
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-slate-900 dark:text-white">Atlas</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">Área: Investigación</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Activo
+                    </span>
+                    <button type="button" class="btn-open-agent-modal text-xs font-medium px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" data-agent-id="atlas">
+                      Ver ficha
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Nara -->
+                <div class="py-3.5 flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm" aria-hidden="true">
+                      Na
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-slate-900 dark:text-white">Nara</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">Skill: Resumen</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Activo
+                    </span>
+                    <button type="button" class="btn-open-agent-modal text-xs font-medium px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" data-agent-id="nara">
+                      Ver ficha
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Lumen -->
+                <div class="py-3.5 flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm" aria-hidden="true">
+                      Lu
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-slate-900 dark:text-white">Lumen</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400">Skill: Análisis CSV</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                      Pausado
+                    </span>
+                    <button type="button" class="btn-open-agent-modal text-xs font-medium px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" data-agent-id="lumen">
+                      Ver ficha
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80">
+              <span class="text-xs text-slate-400 dark:text-slate-500">Datos de demostración coherentes con la sección de Agentes.</span>
+            </div>
+          </div>
+
+          <!-- Región 2: Actividad Reciente -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                  <h3 class="font-semibold text-slate-900 dark:text-white text-base">Actividad Reciente</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Últimos eventos procesados por el hub</p>
+                </div>
+                <button type="button" data-nav-to="actividad" class="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 focus:outline-none focus:underline">
+                  Ver actividad
+                </button>
+              </div>
+
+              <div class="divide-y divide-slate-100 dark:divide-slate-800/80 mt-2">
+                <!-- Evento 1 -->
+                <div class="py-3 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-slate-900 dark:text-white">Atlas</span>
+                      <span class="text-slate-400 dark:text-slate-500">•</span>
+                      <span class="text-slate-600 dark:text-slate-300">Búsqueda web</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Hace 12 minutos</span>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    Completada
+                  </span>
+                </div>
+
+                <!-- Evento 2 -->
+                <div class="py-3 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-slate-900 dark:text-white">Nara</span>
+                      <span class="text-slate-400 dark:text-slate-500">•</span>
+                      <span class="text-slate-600 dark:text-slate-300">Resumen</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Hace 45 minutos</span>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    Completada
+                  </span>
+                </div>
+
+                <!-- Evento 3 -->
+                <div class="py-3 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-slate-900 dark:text-white">Lumen</span>
+                      <span class="text-slate-400 dark:text-slate-500">•</span>
+                      <span class="text-slate-600 dark:text-slate-300">Análisis CSV</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Hace 2 horas</span>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+                    Fallida
+                  </span>
+                </div>
+
+                <!-- Evento 4 -->
+                <div class="py-3 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-slate-900 dark:text-white">Senda</span>
+                      <span class="text-slate-400 dark:text-slate-500">•</span>
+                      <span class="text-slate-600 dark:text-slate-300">Búsqueda web</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Hace 3 horas</span>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    Completada
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80">
+              <span class="text-xs text-slate-400 dark:text-slate-500">Total acumulado: 128 ejecuciones en 24h.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 2: AGENTES -->
+      <!-- ========================================== -->
+      <section id="view-agentes" class="view-panel hidden space-y-6 max-w-7xl mx-auto" aria-labelledby="view-agentes-title">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 id="view-agentes-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Agentes del Sistema</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">4 agentes registrados: 3 activos y 1 pausado. Solo lectura.</p>
+          </div>
+
+          <!-- Filtro de estado -->
+          <div class="flex items-center gap-2">
+            <label for="filter-agentes-status" class="text-xs font-medium text-slate-600 dark:text-slate-400">Filtrar por estado:</label>
+            <select id="filter-agentes-status" class="text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">Todos los agentes (4)</option>
+              <option value="activo">Solo Activos (3)</option>
+              <option value="pausado">Solo Pausados (1)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Lista adaptable de cuatro agentes -->
+        <div id="agentes-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Agente 1: Atlas -->
+          <article class="agent-card bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between" data-status="activo">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base" aria-hidden="true">
+                    At
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-slate-900 dark:text-white text-base">Atlas</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Activo
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">
+                Especialista en investigación documental, rastreo estructurado y consolidación de hallazgos para informes clave.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills asociadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Búsqueda web</span>
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Extracción de entidades</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 dark:text-slate-500">Última ejecución: hace 12 min</span>
+              <button type="button" class="btn-open-agent-modal text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-agent-id="atlas">
+                Ver ficha de agente
+              </button>
+            </div>
+          </article>
+
+          <!-- Agente 2: Nara -->
+          <article class="agent-card bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between" data-status="activo">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base" aria-hidden="true">
+                    Na
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-slate-900 dark:text-white text-base">Nara</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Activo
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">
+                Agente dedicado a la condensación de textos largos, redacción de minutas ejecutivas y resúmenes de reuniones.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills asociadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Resumen</span>
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Clasificación de texto</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 dark:text-slate-500">Última ejecución: hace 45 min</span>
+              <button type="button" class="btn-open-agent-modal text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-agent-id="nara">
+                Ver ficha de agente
+              </button>
+            </div>
+          </article>
+
+          <!-- Agente 3: Lumen -->
+          <article class="agent-card bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between" data-status="pausado">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-base" aria-hidden="true">
+                    Lu
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-slate-900 dark:text-white text-base">Lumen</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                      Pausado
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">
+                Procesamiento de datasets tabulares, detección de anomalías numéricas y transformaciones en hojas de cálculo.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills asociadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Análisis CSV</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 dark:text-slate-500">Última ejecución: hace 2 h (Fallida)</span>
+              <button type="button" class="btn-open-agent-modal text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-agent-id="lumen">
+                Ver ficha de agente
+              </button>
+            </div>
+          </article>
+
+          <!-- Agente 4: Senda -->
+          <article class="agent-card bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between" data-status="activo">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-base" aria-hidden="true">
+                    Se
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-slate-900 dark:text-white text-base">Senda</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Activo
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">
+                Rastreo y monitorización de fuentes web en tiempo real, extracción de artículos y recopilación de referencias.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills asociadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Búsqueda web</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 dark:text-slate-500">Última ejecución: hace 3 h</span>
+              <button type="button" class="btn-open-agent-modal text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-agent-id="senda">
+                Ver ficha de agente
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 3: SKILLS -->
+      <!-- ========================================== -->
+      <section id="view-skills" class="view-panel hidden space-y-6 max-w-7xl mx-auto" aria-labelledby="view-skills-title">
+        <div>
+          <h2 id="view-skills-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Catálogo de Skills</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">5 skills registradas en el entorno. Pulsa en cada encabezado para expandir o contraer su especificación.</p>
+        </div>
+
+        <!-- Lista colapsable con aria-expanded y relaciones accesibles -->
+        <div class="space-y-3" role="region" aria-label="Lista de skills expandibles">
+          
+          <!-- Skill 1: Búsqueda web -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <h3>
+              <button type="button" id="skill-btn-1" aria-expanded="false" aria-controls="skill-panel-1" class="skill-accordion-btn w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold text-xs" aria-hidden="true">
+                    01
+                  </span>
+                  <div>
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">Búsqueda web</span>
+                    <span class="block text-xs text-slate-500 dark:text-slate-400">Categoría: Adquisición de información</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="hidden sm:inline-flex text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">2 agentes asignados</span>
+                  <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            </h3>
+            <div id="skill-panel-1" role="region" aria-labelledby="skill-btn-1" class="skill-accordion-panel hidden px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <p class="leading-relaxed">
+                Permite realizar consultas parametrizadas en índices de internet, filtrar resultados por fecha y dominio, y descargar el contenido textual sanitizado para uso del modelo de lenguaje.
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Agentes que la utilizan:</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Atlas</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Senda</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill 2: Resumen -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <h3>
+              <button type="button" id="skill-btn-2" aria-expanded="false" aria-controls="skill-panel-2" class="skill-accordion-btn w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold text-xs" aria-hidden="true">
+                    02
+                  </span>
+                  <div>
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">Resumen</span>
+                    <span class="block text-xs text-slate-500 dark:text-slate-400">Categoría: Transformación lingüística</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="hidden sm:inline-flex text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">1 agente asignado</span>
+                  <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            </h3>
+            <div id="skill-panel-2" role="region" aria-labelledby="skill-btn-2" class="skill-accordion-panel hidden px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <p class="leading-relaxed">
+                Condensación abstractiva de documentos extensos conservando las directrices clave, conclusiones operativas y puntos de decisión sin alucinaciones de contexto.
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Agentes que la utilizan:</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Nara</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill 3: Análisis CSV -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <h3>
+              <button type="button" id="skill-btn-3" aria-expanded="false" aria-controls="skill-panel-3" class="skill-accordion-btn w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold text-xs" aria-hidden="true">
+                    03
+                  </span>
+                  <div>
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">Análisis CSV</span>
+                    <span class="block text-xs text-slate-500 dark:text-slate-400">Categoría: Datos estructurados</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="hidden sm:inline-flex text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">1 agente asignado</span>
+                  <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            </h3>
+            <div id="skill-panel-3" role="region" aria-labelledby="skill-btn-3" class="skill-accordion-panel hidden px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <p class="leading-relaxed">
+                Lectura, validación de tipos, perfilado estadístico y generación de agrupaciones sobre ficheros delimitados por comas o tabuladores.
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Agentes que la utilizan:</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Lumen</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill 4: Clasificación de texto -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <h3>
+              <button type="button" id="skill-btn-4" aria-expanded="false" aria-controls="skill-panel-4" class="skill-accordion-btn w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold text-xs" aria-hidden="true">
+                    04
+                  </span>
+                  <div>
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">Clasificación de texto</span>
+                    <span class="block text-xs text-slate-500 dark:text-slate-400">Categoría: Taxonomía y etiquetado</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="hidden sm:inline-flex text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">1 agente asignado</span>
+                  <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            </h3>
+            <div id="skill-panel-4" role="region" aria-labelledby="skill-btn-4" class="skill-accordion-panel hidden px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <p class="leading-relaxed">
+                Asignación de categorías jerárquicas y etiquetas semánticas a correos, transcripciones o tickets con umbrales de certidumbre configurables.
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Agentes que la utilizan:</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Nara</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill 5: Extracción de entidades -->
+          <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+            <h3>
+              <button type="button" id="skill-btn-5" aria-expanded="false" aria-controls="skill-panel-5" class="skill-accordion-btn w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold text-xs" aria-hidden="true">
+                    05
+                  </span>
+                  <div>
+                    <span class="block text-sm font-semibold text-slate-900 dark:text-white">Extracción de entidades</span>
+                    <span class="block text-xs text-slate-500 dark:text-slate-400">Categoría: Procesamiento NER</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="hidden sm:inline-flex text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">1 agente asignado</span>
+                  <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            </h3>
+            <div id="skill-panel-5" role="region" aria-labelledby="skill-btn-5" class="skill-accordion-panel hidden px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+              <p class="leading-relaxed">
+                Identificación precisa de personas, organizaciones, importes dinerarios, fechas normalizadas y ubicaciones a partir de prosa libre sin formato.
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="font-medium text-slate-700 dark:text-slate-300">Agentes que la utilizan:</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">Atlas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 4: ACTIVIDAD -->
+      <!-- ========================================== -->
+      <section id="view-actividad" class="view-panel hidden space-y-6 max-w-7xl mx-auto" aria-labelledby="view-actividad-title">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 id="view-actividad-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Registro de Actividad</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Historial cronológico de ejecuciones de agentes y skills. Pulsa una fila para consultar su detalle.</p>
+          </div>
+
+          <!-- Filtro por resultado -->
+          <div class="flex items-center gap-2">
+            <label for="filter-activity-status" class="text-xs font-medium text-slate-600 dark:text-slate-400">Filtrar por resultado:</label>
+            <select id="filter-activity-status" class="text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">Todos los resultados</option>
+              <option value="completada">Solo Completadas</option>
+              <option value="fallida">Solo Fallidas</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabla adaptable de ejecuciones -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs" aria-label="Historial de ejecuciones">
+              <thead class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase font-semibold text-[11px] tracking-wider">
+                <tr>
+                  <th scope="col" class="px-4 py-3.5">ID / Fecha y hora</th>
+                  <th scope="col" class="px-4 py-3.5">Agente</th>
+                  <th scope="col" class="px-4 py-3.5">Skill ejecutada</th>
+                  <th scope="col" class="px-4 py-3.5">Resultado</th>
+                  <th scope="col" class="px-4 py-3.5 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="activity-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                <!-- Evento 1 -->
+                <tr class="activity-row hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer transition-colors" data-status="completada" data-event-id="EV-1048" tabindex="0" role="button" aria-label="Ver detalles de la ejecución EV-1048 de Atlas">
+                  <td class="px-4 py-3.5 font-medium text-slate-900 dark:text-white">
+                    <div>EV-1048</div>
+                    <div class="text-[11px] text-slate-400 font-normal">Hace 12 min (10:48:12)</div>
+                  </td>
+                  <td class="px-4 py-3.5 font-semibold text-slate-800 dark:text-slate-200">Atlas</td>
+                  <td class="px-4 py-3.5 text-slate-600 dark:text-slate-300">Búsqueda web</td>
+                  <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Completada
+                    </span>
+                  </td>
+                  <td class="px-4 py-3.5 text-right">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Ver detalle</span>
+                  </td>
+                </tr>
+
+                <!-- Evento 2 -->
+                <tr class="activity-row hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer transition-colors" data-status="completada" data-event-id="EV-1047" tabindex="0" role="button" aria-label="Ver detalles de la ejecución EV-1047 de Nara">
+                  <td class="px-4 py-3.5 font-medium text-slate-900 dark:text-white">
+                    <div>EV-1047</div>
+                    <div class="text-[11px] text-slate-400 font-normal">Hace 45 min (10:15:00)</div>
+                  </td>
+                  <td class="px-4 py-3.5 font-semibold text-slate-800 dark:text-slate-200">Nara</td>
+                  <td class="px-4 py-3.5 text-slate-600 dark:text-slate-300">Resumen</td>
+                  <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Completada
+                    </span>
+                  </td>
+                  <td class="px-4 py-3.5 text-right">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Ver detalle</span>
+                  </td>
+                </tr>
+
+                <!-- Evento 3 -->
+                <tr class="activity-row hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer transition-colors" data-status="fallida" data-event-id="EV-1046" tabindex="0" role="button" aria-label="Ver detalles de la ejecución EV-1046 de Lumen">
+                  <td class="px-4 py-3.5 font-medium text-slate-900 dark:text-white">
+                    <div>EV-1046</div>
+                    <div class="text-[11px] text-slate-400 font-normal">Hace 2 horas (09:02:18)</div>
+                  </td>
+                  <td class="px-4 py-3.5 font-semibold text-slate-800 dark:text-slate-200">Lumen</td>
+                  <td class="px-4 py-3.5 text-slate-600 dark:text-slate-300">Análisis CSV</td>
+                  <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+                      Fallida
+                    </span>
+                  </td>
+                  <td class="px-4 py-3.5 text-right">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Ver detalle</span>
+                  </td>
+                </tr>
+
+                <!-- Evento 4 -->
+                <tr class="activity-row hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer transition-colors" data-status="completada" data-event-id="EV-1045" tabindex="0" role="button" aria-label="Ver detalles de la ejecución EV-1045 de Senda">
+                  <td class="px-4 py-3.5 font-medium text-slate-900 dark:text-white">
+                    <div>EV-1045</div>
+                    <div class="text-[11px] text-slate-400 font-normal">Hace 3 horas (08:05:44)</div>
+                  </td>
+                  <td class="px-4 py-3.5 font-semibold text-slate-800 dark:text-slate-200">Senda</td>
+                  <td class="px-4 py-3.5 text-slate-600 dark:text-slate-300">Búsqueda web</td>
+                  <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      Completada
+                    </span>
+                  </td>
+                  <td class="px-4 py-3.5 text-right">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Ver detalle</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="p-3 bg-slate-50 dark:bg-slate-800/40 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+            <span>Mostrando las últimas ejecuciones registradas</span>
+            <span class="font-medium text-slate-700 dark:text-slate-300">128 ejecuciones completadas en 24h</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 5: CATÁLOGO -->
+      <!-- ========================================== -->
+      <section id="view-catalogo" class="view-panel hidden space-y-6 max-w-7xl mx-auto" aria-labelledby="view-catalogo-title">
+        <div>
+          <h2 id="view-catalogo-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Catálogo de Plantillas</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Plantillas preconfiguradas de agentes combinando skills existentes. Modo demostración sin instalación.</p>
+        </div>
+
+        <!-- Cuadrícula adaptable de tres fichas de plantillas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Ficha 1: Analista de investigación -->
+          <article class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 uppercase tracking-wide">Plantilla</span>
+                <span class="text-xs text-slate-400">Demostración</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mt-3">Analista de investigación</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Diseñado para sondeos sectoriales exhaustivos, recopilación de fuentes académicas o corporativas y organización de referencias contrastadas.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills combinadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Búsqueda web</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Extracción de entidades</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button type="button" class="btn-open-catalog-modal w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-catalog-id="investigacion">
+                Ver ficha informativa
+              </button>
+            </div>
+          </article>
+
+          <!-- Ficha 2: Asistente de resúmenes -->
+          <article class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 uppercase tracking-wide">Plantilla</span>
+                <span class="text-xs text-slate-400">Demostración</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mt-3">Asistente de resúmenes</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Optimizado para la lectura rápida de minutas, ordenación de puntos de acuerdo y clasificación temática de documentos internos.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills combinadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Resumen</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Clasificación de texto</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button type="button" class="btn-open-catalog-modal w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-catalog-id="resumenes">
+                Ver ficha informativa
+              </button>
+            </div>
+          </article>
+
+          <!-- Ficha 3: Revisor de datos CSV -->
+          <article class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 uppercase tracking-wide">Plantilla</span>
+                <span class="text-xs text-slate-400">Demostración</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mt-3">Revisor de datos CSV</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Estructurado para auditar bases de datos exportadas, identificar registros corruptos y generar agregaciones rápidas.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">Skills combinadas</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Análisis CSV</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-700 dark:text-slate-300">Clasificación de texto</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button type="button" class="btn-open-catalog-modal w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" data-catalog-id="datos_csv">
+                Ver ficha informativa
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 6: AJUSTES -->
+      <!-- ========================================== -->
+      <section id="view-ajustes" class="view-panel hidden space-y-6 max-w-3xl mx-auto" aria-labelledby="view-ajustes-title">
+        <div>
+          <h2 id="view-ajustes-title" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Ajustes de Interfaz</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Configuración visual local para la sesión actual del panel de demostración.</p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-6">
+          <div>
+            <h3 class="text-base font-semibold text-slate-900 dark:text-white">Preferencia de Tema</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              El tema seleccionado afecta exclusivamente a la apariencia visual de la interfaz de AgentHub en este navegador. Se conserva en el almacenamiento local (localStorage).
+            </p>
+          </div>
+
+          <!-- Selector de Tema Claro / Oscuro -->
+          <div class="space-y-3" role="radiogroup" aria-labelledby="view-ajustes-title">
+            <div class="flex items-center justify-between p-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-xs" aria-hidden="true">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
+                <div>
+                  <label for="theme-radio-light" class="text-sm font-medium text-slate-900 dark:text-white block cursor-pointer">Modo Claro</label>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">Fondos claros de alto contraste ideales para entornos iluminados.</span>
+                </div>
+              </div>
+              <input type="radio" id="theme-radio-light" name="theme-radio" value="light" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 cursor-pointer">
+            </div>
+
+            <div class="flex items-center justify-between p-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-xs" aria-hidden="true">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </div>
+                <div>
+                  <label for="theme-radio-dark" class="text-sm font-medium text-slate-900 dark:text-white block cursor-pointer">Modo Oscuro</label>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">Paleta oscura profunda para reducir la fatiga visual.</span>
+                </div>
+              </div>
+              <input type="radio" id="theme-radio-dark" name="theme-radio" value="dark" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 cursor-pointer">
+            </div>
+          </div>
+
+          <!-- Estado legible sincronizado -->
+          <div class="p-4 rounded-lg bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-semibold text-indigo-900 dark:text-indigo-200 block">Estado actual del tema:</span>
+              <span id="theme-status-text" class="text-xs text-indigo-700 dark:text-indigo-300">Modo Claro activo</span>
+            </div>
+            <span class="text-[11px] text-indigo-500 dark:text-indigo-400">Sincronizado con cabecera</span>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500">
+            Conforme a la especificación, esta vista no expone credenciales, facturación, servicios remotos ni persistencia más allá del tema visual.
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL INFORMATIVO ACCESIBLE (Solo Lectura) -->
+  <!-- ========================================== -->
+  <div id="info-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden focus:outline-none flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+        <h3 id="modal-title" class="font-bold text-slate-900 dark:text-white text-base">Ficha de Información</h3>
+        <button id="modal-close-btn" type="button" aria-label="Cerrar ventana modal" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div id="modal-body-content" class="p-6 overflow-y-auto space-y-4 text-xs text-slate-600 dark:text-slate-300">
+        <!-- Rellenado dinámicamente mediante JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end flex-shrink-0">
+        <button id="modal-confirm-btn" type="button" class="px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT VANILLA COHESIVO Y ACCESIBLE -->
+  <!-- ========================================== -->
+  <script>
+    (function() {
+      // Estado de Datos Ficticios Coherentes
+      const AGENTS_DATA = {
+        atlas: {
+          name: "Atlas",
+          status: "Activo",
+          statusClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+          desc: "Especialista en investigación documental, rastreo estructurado y consolidación de hallazgos para informes clave.",
+          skills: ["Búsqueda web", "Extracción de entidades"],
+          runs: "42 completadas hoy",
+          scope: "Solo lectura. Las llamadas a APIs externas están simuladas en este panel demo."
+        },
+        nara: {
+          name: "Nara",
+          status: "Activo",
+          statusClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+          desc: "Agente dedicado a la condensación de textos largos, redacción de minutas ejecutivas y resúmenes de reuniones.",
+          skills: ["Resumen", "Clasificación de texto"],
+          runs: "56 completadas hoy",
+          scope: "Solo lectura. Opera en memoria sin almacenamiento en base de datos externa."
+        },
+        lumen: {
+          name: "Lumen",
+          status: "Pausado",
+          statusClass: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+          desc: "Procesamiento de datasets tabulares, detección de anomalías numéricas y transformaciones en hojas de cálculo.",
+          skills: ["Análisis CSV"],
+          runs: "12 completadas, 1 fallida",
+          scope: "Pausado por mantenimiento de esquema. No admite edición ni reactivación desde este panel."
+        },
+        senda: {
+          name: "Senda",
+          status: "Activo",
+          statusClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+          desc: "Rastreo y monitorización de fuentes web en tiempo real, extracción de artículos y recopilación de referencias.",
+          skills: ["Búsqueda web"],
+          runs: "18 completadas hoy",
+          scope: "Solo lectura. No ejecuta procesos de scraping en segundo plano."
+        }
+      };
+
+      const CATALOG_DATA = {
+        investigacion: {
+          title: "Plantilla: Analista de investigación",
+          type: "Plantilla de Demostración",
+          desc: "Estructura diseñada para consolidar informes de mercado. Integra consultas a fuentes públicas y extracción normalizada de organizaciones y fechas.",
+          skills: ["Búsqueda web", "Extracción de entidades"],
+          notes: "Ficha informativa estática. Conforme a las reglas del producto, no se permite instalación ni instanciación de agentes."
+        },
+        resumenes: {
+          title: "Plantilla: Asistente de resúmenes",
+          type: "Plantilla de Demostración",
+          desc: "Pipeline de procesamiento que categoriza el tipo de texto entrante y produce una minuta ejecutiva en viñetas ordenadas.",
+          skills: ["Resumen", "Clasificación de texto"],
+          notes: "Ficha informativa estática. No hay conexión a servicios de terceros ni cobro por uso."
+        },
+        datos_csv: {
+          title: "Plantilla: Revisor de datos CSV",
+          type: "Plantilla de Demostración",
+          desc: "Automatiza la detección de celdas nulas o formatos de fecha erróneos en archivos CSV pesados y los clasifica según su gravedad.",
+          skills: ["Análisis CSV", "Clasificación de texto"],
+          notes: "Ficha informativa estática. Demostración de catálogo cerrado."
+        }
+      };
+
+      const EVENT_DATA = {
+        "EV-1048": {
+          id: "EV-1048",
+          agent: "Atlas",
+          skill: "Búsqueda web",
+          status: "Completada",
+          time: "Hace 12 min (10:48:12)",
+          duration: "1.4s",
+          output: "24 fuentes indexadas, 3 documentos relevantes descargados con éxito sin advertencias."
+        },
+        "EV-1047": {
+          id: "EV-1047",
+          agent: "Nara",
+          skill: "Resumen",
+          status: "Completada",
+          time: "Hace 45 min (10:15:00)",
+          duration: "2.1s",
+          output: "Informe condensado a 350 palabras con índice de lectura calificado en 98/100."
+        },
+        "EV-1046": {
+          id: "EV-1046",
+          agent: "Lumen",
+          skill: "Análisis CSV",
+          status: "Fallida",
+          time: "Hace 2 horas (09:02:18)",
+          duration: "0.8s",
+          output: "Error de análisis: Delimitador no válido en fila 420. Operación detenida de forma segura."
+        },
+        "EV-1045": {
+          id: "EV-1045",
+          agent: "Senda",
+          skill: "Búsqueda web",
+          status: "Completada",
+          time: "Hace 3 horas (08:05:44)",
+          duration: "1.1s",
+          output: "Rastreo finalizado con 15 menciones registradas y normalizadas."
+        }
+      };
+
+      // Elementos del DOM
+      const navItems = document.querySelectorAll('.nav-item');
+      const viewPanels = document.querySelectorAll('.view-panel');
+      const headerTitle = document.getElementById('header-view-title');
+      const mainContent = document.getElementById('main-content');
+
+      // Tema
+      const themeToggleHeader = document.getElementById('theme-toggle-header');
+      const themeIconSun = document.getElementById('theme-icon-sun');
+      const themeIconMoon = document.getElementById('theme-icon-moon');
+      const themeRadioLight = document.getElementById('theme-radio-light');
+      const themeRadioDark = document.getElementById('theme-radio-dark');
+      const themeStatusText = document.getElementById('theme-status-text');
+
+      // Menú de Cuenta
+      const accountDropdownBtn = document.getElementById('account-dropdown-btn');
+      const accountMenu = document.getElementById('account-menu');
+      const accountCaret = document.getElementById('account-caret');
+
+      // Modal
+      const modal = document.getElementById('info-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalBody = document.getElementById('modal-body-content');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+      let lastFocusedElement = null;
+
+      // ----------------------------------------------------
+      // GESTIÓN DEL TEMA (Persistencia en localStorage)
+      // ----------------------------------------------------
+      function applyTheme(isDark) {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('agenthub-theme', 'dark');
+          themeIconSun.classList.remove('hidden');
+          themeIconMoon.classList.add('hidden');
+          themeToggleHeader.setAttribute('aria-label', 'Cambiar a modo claro');
+          if (themeRadioDark) themeRadioDark.checked = true;
+          if (themeStatusText) themeStatusText.textContent = 'Modo Oscuro activo';
+        } else {
+          document.documentElement.classList.remove('dark');
+          localStorage.setItem('agenthub-theme', 'light');
+          themeIconSun.classList.add('hidden');
+          themeIconMoon.classList.remove('hidden');
+          themeToggleHeader.setAttribute('aria-label', 'Cambiar a modo oscuro');
+          if (themeRadioLight) themeRadioLight.checked = true;
+          if (themeStatusText) themeStatusText.textContent = 'Modo Claro activo';
+        }
+      }
+
+      function initTheme() {
+        const savedTheme = localStorage.getItem('agenthub-theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme ? (savedTheme === 'dark') : prefersDark;
+        applyTheme(isDark);
+      }
+
+      themeToggleHeader.addEventListener('click', () => {
+        const isCurrentlyDark = document.documentElement.classList.contains('dark');
+        applyTheme(!isCurrentlyDark);
+      });
+
+      if (themeRadioLight && themeRadioDark) {
+        themeRadioLight.addEventListener('change', () => {
+          if (themeRadioLight.checked) applyTheme(false);
+        });
+        themeRadioDark.addEventListener('change', () => {
+          if (themeRadioDark.checked) applyTheme(true);
+        });
+      }
+
+      // ----------------------------------------------------
+      // NAVEGACIÓN SPA (6 Vistas)
+      // ----------------------------------------------------
+      const VIEW_TITLES = {
+        resumen: "Resumen",
+        agentes: "Agentes",
+        skills: "Skills",
+        actividad: "Actividad",
+        catalogo: "Catálogo",
+        ajustes: "Ajustes"
+      };
+
+      function switchView(targetViewId) {
+        // Cierra desplegables activos
+        closeAccountMenu();
+
+        // Oculta todas las vistas y muestra la elegida
+        viewPanels.forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        const targetPanel = document.getElementById(`view-${targetViewId}`);
+        if (targetPanel) {
+          targetPanel.classList.remove('hidden');
+        }
+
+        // Actualiza el estado activo de los botones de navegación
+        navItems.forEach(btn => {
+          const view = btn.dataset.view;
+          if (view === targetViewId) {
+            btn.setAttribute('aria-current', 'page');
+            btn.className = "nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500";
+          } else {
+            btn.removeAttribute('aria-current');
+            btn.className = "nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-indigo-500";
+          }
+        });
+
+        // Actualiza título del header
+        if (VIEW_TITLES[targetViewId]) {
+          headerTitle.textContent = VIEW_TITLES[targetViewId];
+        }
+
+        // Foco accesible al contenedor principal sin saltar
+        mainContent.scrollTop = 0;
+      }
+
+      navItems.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchView(btn.dataset.view);
+        });
+      });
+
+      // Enlaces de navegación interna (ej: "Ver actividad")
+      document.querySelectorAll('[data-nav-to]').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const target = trigger.getAttribute('data-nav-to');
+          switchView(target);
+        });
+      });
+
+      // ----------------------------------------------------
+      // MENÚ DESPLEGABLE DE CUENTA
+      // ----------------------------------------------------
+      function openAccountMenu() {
+        accountMenu.classList.remove('hidden');
+        accountDropdownBtn.setAttribute('aria-expanded', 'true');
+        accountCaret.classList.add('rotate-180');
+      }
+
+      function closeAccountMenu() {
+        accountMenu.classList.add('hidden');
+        accountDropdownBtn.setAttribute('aria-expanded', 'false');
+        accountCaret.classList.remove('rotate-180');
+      }
+
+      accountDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = accountDropdownBtn.getAttribute('aria-expanded') === 'true';
+        if (isOpen) {
+          closeAccountMenu();
+        } else {
+          openAccountMenu();
+        }
+      });
+
+      // ----------------------------------------------------
+      // SKILLS COLAPSABLES (Acordeones accesibles)
+      // ----------------------------------------------------
+      const accordionBtns = document.querySelectorAll('.skill-accordion-btn');
+      accordionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panelId = btn.getAttribute('aria-controls');
+          const panel = document.getElementById(panelId);
+          const arrow = btn.querySelector('.accordion-arrow');
+          const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+          if (isExpanded) {
+            btn.setAttribute('aria-expanded', 'false');
+            panel.classList.add('hidden');
+            if (arrow) arrow.classList.remove('rotate-180');
+          } else {
+            btn.setAttribute('aria-expanded', 'true');
+            panel.classList.remove('hidden');
+            if (arrow) arrow.classList.add('rotate-180');
+          }
+        });
+      });
+
+      // ----------------------------------------------------
+      // FILTRO DE AGENTES (Todos / Activos / Pausados)
+      // ----------------------------------------------------
+      const filterAgentesSelect = document.getElementById('filter-agentes-status');
+      if (filterAgentesSelect) {
+        filterAgentesSelect.addEventListener('change', (e) => {
+          const val = e.target.value;
+          const cards = document.querySelectorAll('.agent-card');
+          cards.forEach(card => {
+            const status = card.dataset.status;
+            if (val === 'all' || val === status) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      }
+
+      // ----------------------------------------------------
+      // FILTRO DE ACTIVIDAD (Todos / Completada / Fallida)
+      // ----------------------------------------------------
+      const filterActivitySelect = document.getElementById('filter-activity-status');
+      if (filterActivitySelect) {
+        filterActivitySelect.addEventListener('change', (e) => {
+          const val = e.target.value;
+          const rows = document.querySelectorAll('.activity-row');
+          rows.forEach(row => {
+            const status = row.dataset.status;
+            if (val === 'all' || val === status) {
+              row.classList.remove('hidden');
+            } else {
+              row.classList.add('hidden');
+            }
+          });
+        });
+      }
+
+      // ----------------------------------------------------
+      // MODALES INFORMATIVOS (Accesibilidad completa)
+      // ----------------------------------------------------
+      function openModal(title, htmlContent, triggerElement) {
+        lastFocusedElement = triggerElement || document.activeElement;
+        modalTitle.textContent = title;
+        modalBody.innerHTML = htmlContent;
+        modal.classList.remove('hidden');
+        modalCloseBtn.focus();
+        document.body.classList.add('overflow-hidden');
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+        }
+      }
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalConfirmBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+
+        const focusableElements = [...modal.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )].filter(element => element.getClientRects().length > 0);
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Abrir modal de Agente
+      document.querySelectorAll('.btn-open-agent-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const agentId = btn.getAttribute('data-agent-id');
+          const data = AGENTS_DATA[agentId];
+          if (!data) return;
+
+          const content = `
+            <div class="space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-sm font-bold text-slate-900 dark:text-white">${data.name}</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${data.statusClass}">${data.status}</span>
+              </div>
+              <p class="text-slate-600 dark:text-slate-400">${data.desc}</p>
+              <div>
+                <span class="font-semibold text-slate-800 dark:text-slate-200 block mb-1">Skills integradas:</span>
+                <div class="flex flex-wrap gap-1.5">
+                  ${data.skills.map(s => `<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${s}</span>`).join('')}
+                </div>
+              </div>
+              <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-1">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">Métrica diaria:</span>
+                  <span class="font-medium text-slate-800 dark:text-slate-200">${data.runs}</span>
+                </div>
+                <div class="text-[11px] text-slate-400 mt-2">${data.scope}</div>
+              </div>
+            </div>
+          `;
+          openModal(`Ficha de Agente: ${data.name}`, content, btn);
+        });
+      });
+
+      // Abrir modal de Catálogo
+      document.querySelectorAll('.btn-open-catalog-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const catId = btn.getAttribute('data-catalog-id');
+          const data = CATALOG_DATA[catId];
+          if (!data) return;
+
+          const content = `
+            <div class="space-y-4">
+              <div class="pb-3 border-b border-slate-100 dark:border-slate-800">
+                <span class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">${data.type}</span>
+                <h4 class="text-sm font-bold text-slate-900 dark:text-white mt-1">${data.title}</h4>
+              </div>
+              <p class="text-slate-600 dark:text-slate-400 leading-relaxed">${data.desc}</p>
+              <div>
+                <span class="font-semibold text-slate-800 dark:text-slate-200 block mb-1">Requisitos de Skills:</span>
+                <div class="flex flex-wrap gap-1.5">
+                  ${data.skills.map(s => `<span class="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-medium">${s}</span>`).join('')}
+                </div>
+              </div>
+              <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-[11px] text-slate-500 dark:text-slate-400">
+                ${data.notes}
+              </div>
+            </div>
+          `;
+          openModal("Ficha de Plantilla del Catálogo", content, btn);
+        });
+      });
+
+      // Abrir modal de Evento de Actividad
+      document.querySelectorAll('.activity-row').forEach(row => {
+        function triggerRowModal() {
+          const evId = row.getAttribute('data-event-id');
+          const data = EVENT_DATA[evId];
+          if (!data) return;
+
+          const statusBadge = data.status === 'Completada' 
+            ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Completada</span>'
+            : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">Fallida</span>';
+
+          const content = `
+            <div class="space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                  <span class="text-xs text-slate-400">Identificador de evento</span>
+                  <p class="text-base font-bold text-slate-900 dark:text-white">${data.id}</p>
+                </div>
+                ${statusBadge}
+              </div>
+              <div class="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-lg">
+                <div>
+                  <span class="text-slate-400 block text-[11px]">Agente</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">${data.agent}</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[11px]">Skill invocada</span>
+                  <span class="font-semibold text-slate-800 dark:text-slate-200">${data.skill}</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[11px]">Tiempo registrado</span>
+                  <span class="text-slate-700 dark:text-slate-300">${data.time}</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[11px]">Latencia de ejecución</span>
+                  <span class="text-slate-700 dark:text-slate-300">${data.duration}</span>
+                </div>
+              </div>
+              <div>
+                <span class="font-semibold text-slate-800 dark:text-slate-200 block mb-1">Registro de salida:</span>
+                <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-700 dark:text-slate-300 font-mono text-[11px] leading-relaxed">${data.output}</p>
+              </div>
+              <p class="text-[11px] text-slate-400">Demostración de solo lectura. No se admiten reintentos ni purga de registros.</p>
+            </div>
+          `;
+          openModal(`Detalle de Ejecución ${data.id}`, content, row);
+        }
+
+        row.addEventListener('click', triggerRowModal);
+        row.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            triggerRowModal();
+          }
+        });
+      });
+
+      // ----------------------------------------------------
+      // GESTIÓN GLOBAL DE TECLADO (Escape y Clic Exterior)
+      // ----------------------------------------------------
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          // Si el modal está abierto, ciérralo
+          if (!modal.classList.contains('hidden')) {
+            closeModal();
+          }
+          // Si el menú de cuenta está abierto, ciérralo
+          closeAccountMenu();
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        // Cierra el menú de cuenta si se hace clic fuera
+        if (!accountDropdownBtn.contains(e.target) && !accountMenu.contains(e.target)) {
+          closeAccountMenu();
+        }
+      });
+
+      // Inicialización
+      initTheme();
+    })();
+  </script>
+</body>
+</html>
